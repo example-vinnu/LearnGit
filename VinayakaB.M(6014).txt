@@ -1,0 +1,169 @@
+Step 1: Web Pages Structure
+
+ecommerce-frontend/
+├── src/
+│   ├── components/
+│   │   ├── AdminDashboard.js
+│   │   ├── Cart.js
+│   │   ├── Header.js
+│   │   ├── MerchantDashboard.js
+│   │   ├── ProductList.js
+│   │   └── RegisterUser.js
+│   ├── pages/
+│   │   ├── HomePage.js
+│   │   ├── LoginPage.js
+│   └── services/
+│       └── api.js
+│   ├── App.js
+│   ├── index.js
+
+
+=======================================================================================================================================================================================================
+
+Step 2: Design the Database Tables
+Tables:
+Users
+
+id, username, password, role (Admin, Merchant, Customer)
+Merchants
+
+id, name, address, contact_details, product_type, user_id (Foreign key to Users)
+Products
+
+id, name, description, price, image_url, merchant_id (Foreign key to Merchants)
+Orders
+
+id, customer_id (Foreign key to Users), total_price, status
+Order_Items
+
+id, order_id (Foreign key to Orders), product_id (Foreign key to Products), quantity, price
+Cart
+
+id, customer_id (Foreign key to Users), product_id (Foreign key to Products), quantity
+
+=======================================================================================================================================================================================================
+
+Relations:
+
+Users can be Admin, Merchant, or Customer.
+Merchants are linked to Users.
+Products are linked to Merchants.
+Orders are linked to Customers (Users).
+Order_Items are linked to Orders and Products.
+Cart is linked to Customers (Users) and Products.
+
+=======================================================================================================================================================================================================
+
+Step 3: Database Scripts
+Create Tables Script
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE merchants (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    address VARCHAR(255),
+    contact_details VARCHAR(100),
+    product_type VARCHAR(100),
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE products (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    image_url VARCHAR(255),
+    merchant_id BIGINT,
+    FOREIGN KEY (merchant_id) REFERENCES merchants(id)
+);
+
+CREATE TABLE orders (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_id BIGINT,
+    total_price DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(20),
+    FOREIGN KEY (customer_id) REFERENCES users(id)
+);
+
+CREATE TABLE order_items (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT,
+    product_id BIGINT,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE TABLE cart (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    customer_id BIGINT,
+    product_id BIGINT,
+    quantity INT NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+=================================================================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
